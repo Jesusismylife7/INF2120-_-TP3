@@ -8,6 +8,6 @@ public class Test {
         list.inserer(10);
 
     //    System.out.println(list.inferieure.elem);
-        System.out.println(list.superieure.elem);
+   //     System.out.println(list.superieure.elem);
     }
 }
