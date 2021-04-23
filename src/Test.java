@@ -5,8 +5,7 @@ public class Test {
         list.inserer(2);
         list.inserer(0);
         list.inserer(5);
-        System.out.println("yoman");
         list.inserer(10);
-
+        System.out.println("yoman");
     }
 }

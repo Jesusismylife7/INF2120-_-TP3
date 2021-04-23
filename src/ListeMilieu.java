@@ -60,7 +60,8 @@ public class ListeMilieu< E extends Comparable< E > > {
             Maillon<E> suiv = superieure;
             while (suiv != null && valeur.compareTo(suiv.elem) > 0) {
                 prec = suiv;
-                suiv = superieure.suivant;
+                //La boucle finissait pas il fallait mettre suiv pour que ça s'arrête 
+                suiv = suiv.suivant;
             }
 
             // 2-> 3-> 6-> 9x
@@ -101,6 +102,7 @@ public class ListeMilieu< E extends Comparable< E > > {
         return inferieure.elem;
     }
 
+
     public E minima() {
         Maillon<E> tmp = inferieure;
         while (tmp.suivant != null)
@@ -118,8 +120,8 @@ public class ListeMilieu< E extends Comparable< E > > {
     }
 
     /**
-     * A tester
-     * @param valeur
+     * Cette méthode sert a supprimer la valeur mise dans les éléments.
+     * @param valeur la veuleur supprimer.
      */
     public void supprimer( E valeur ) {
         Maillon<E> tmp ;
@@ -137,9 +139,14 @@ public class ListeMilieu< E extends Comparable< E > > {
         tmp.suivant  = tmp.suivant.suivant;
     }
 
+    /*
+
+     */
     public int taille() {
         return superieureTaille + inferieureTaille;
     }
+
+    //*
 
     public void equilibrer() {
         // le nb elem de superieur = nb elem de inferieur ou nb elem inferieur - 1
