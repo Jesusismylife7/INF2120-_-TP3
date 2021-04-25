@@ -36,9 +36,24 @@ public class ListeMilieu< E extends Comparable< E > > {
         Maillon<E> tmp = superieure;
         for (int i=0; i < superieureTaille; i++){
             nouv.inserer(tmp.elem);
-            tmp = tmp.suivant;
             this.supprimer(tmp.elem);
+            tmp = tmp.suivant;
+
         }
+        superieureTaille =0;
+        Maillon<E> pmt = inferieure;
+        superieure = pmt;
+        tmp = superieure;
+        pmt  = pmt.suivant;
+
+        int i;
+        for( i=1; i < inferieureTaille /2; i++){
+            superieure = new Maillon<>(pmt.elem, superieure);
+            pmt  = pmt.suivant;
+        }
+
+
+
         return nouv;
     }
 
@@ -60,7 +75,7 @@ public class ListeMilieu< E extends Comparable< E > > {
             Maillon<E> suiv = superieure;
             while (suiv != null && valeur.compareTo(suiv.elem) > 0) {
                 prec = suiv;
-                //La boucle finissait pas il fallait mettre suiv pour que ça s'arrête 
+                //La boucle finissait pas il fallait mettre suiv pour que ça s'arrête
                 suiv = suiv.suivant;
             }
 
@@ -137,6 +152,10 @@ public class ListeMilieu< E extends Comparable< E > > {
             tmp = tmp.suivant;
         }
         tmp.suivant  = tmp.suivant.suivant;
+        int diff_taille = inferieureTaille - superieureTaille;
+        if(diff_taille != 0 && diff_taille != 1){
+            equilibrer();
+        }
     }
 
     /*
@@ -151,24 +170,24 @@ public class ListeMilieu< E extends Comparable< E > > {
     public void equilibrer() {
         // le nb elem de superieur = nb elem de inferieur ou nb elem inferieur - 1
 
-        // return -> 1: 15 17 18 19
-        //              12 10 4
+        // return -> 1: 4 10 12
+        //              2 1 0
+
+        2 :  18 19
+            15 17
 
         int diff_taille = inferieureTaille - superieureTaille;
-        while(diff_taille != 0 || diff_taille != 1) {
+        while(diff_taille != 0 && diff_taille != 1) {
             if (diff_taille < 0) {
                 // transfert superieur vers inferieur
                 // le premier de supérieur devient le premier de inférieur
-                Maillon<E> tmp = superieure.suivant;
-                superieure.suivant = inferieure;
-                inferieure = superieure;
-                superieure = tmp;
+
+                inferieure = new Maillon<>(superieure.elem, superieure);
+                superieure = superieure.suivant;
             } else if (diff_taille > 1) {
                 //transfert inferieur -> superieur
-                Maillon<E> tmp = inferieure.suivant;
-                inferieure.suivant = superieure;
-                superieure = inferieure;
-                inferieure = tmp;
+                superieure = new Maillon<>(inferieure.elem, inferieure);
+                inferieure = inferieure.suivant;
             }
 
             diff_taille -= 2;

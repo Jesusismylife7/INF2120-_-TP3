@@ -2,7 +2,7 @@
  *
  * @param <E>
  */
-public class Maillon< E extends Comparable< E > > {
+public class Maillon< E > {
     E elem;
     Maillon< E > suivant;
 
