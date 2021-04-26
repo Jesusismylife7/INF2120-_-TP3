@@ -94,7 +94,7 @@ public class ListeMilieu< E extends Comparable< E > > {
             Maillon<E> suiv = inferieure;
             while (valeur.compareTo(suiv.elem) > 0) {
                 prec = suiv;
-                suiv = inferieure.suivant;
+                suiv = suiv.suivant;
             }
 
             // ajouter au début de la liste
