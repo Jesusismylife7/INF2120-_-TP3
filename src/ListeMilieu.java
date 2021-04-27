@@ -43,7 +43,7 @@ public class ListeMilieu< E extends Comparable< E > > {
         superieureTaille =0;
         Maillon<E> pmt = inferieure;
         superieure = pmt;
-        tmp = superieure;
+        //tmp = superieure;
         pmt  = pmt.suivant;
 
         int i;
@@ -122,7 +122,7 @@ public class ListeMilieu< E extends Comparable< E > > {
         Maillon<E> tmp = inferieure;
         while (tmp.suivant != null)
             tmp=  tmp.suivant;
-
+E
         return tmp.elem;
     }
 
@@ -136,7 +136,7 @@ public class ListeMilieu< E extends Comparable< E > > {
 
     /**
      * Cette méthode sert a supprimer la valeur mise dans les éléments.
-     * @param valeur la veuleur supprimer.
+     * @param valeur la veuleur a supprimer.
      */
     public void supprimer( E valeur ) {
         Maillon<E> tmp ;
