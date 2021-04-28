@@ -66,7 +66,7 @@ public class ListeMilieu< E extends Comparable< E > > {
     public void inserer( E valeur ) {
         // toutes valeurs <= 10 -> inférieure
         // autrement dans supérieur
-        System.out.println(valeur);
+        // System.out.println(valeur);
         int compTo = taille() == 0 ? 0 : valeur.compareTo(milieu());
         if (compTo > 0) {
             // ajouter dans la liste supérieure
@@ -80,8 +80,9 @@ public class ListeMilieu< E extends Comparable< E > > {
             }
 
             // 2-> 3-> 6-> 9x
+            // 3x
             if (prec == null) {
-                superieure = new Maillon<E>(valeur, superieure);
+                superieure = new Maillon<E>(valeur);
             } else {
                 prec.suivant = new Maillon<E>(valeur, suiv);
             }
@@ -92,14 +93,14 @@ public class ListeMilieu< E extends Comparable< E > > {
             // ajouter dans la liste inférieure
             Maillon<E> prec = null;
             Maillon<E> suiv = inferieure;
-            while (valeur.compareTo(suiv.elem) > 0) {
+            while (suiv != null && valeur.compareTo(suiv.elem) < 0) {
                 prec = suiv;
                 suiv = suiv.suivant;
             }
 
             // ajouter au début de la liste
             if (prec == null) {
-                inferieure = new Maillon<E>(valeur, inferieure);
+                inferieure = new Maillon<E>(valeur);
             } else {
                 prec.suivant = new Maillon<E>(valeur, suiv);
             }
@@ -111,6 +112,8 @@ public class ListeMilieu< E extends Comparable< E > > {
             inferieure = new Maillon< E >(valeur, inferieure);
             inferieureTaille++;
         }
+
+        equilibrer();
     }
 
     public E milieu() {
@@ -119,17 +122,25 @@ public class ListeMilieu< E extends Comparable< E > > {
 
 
     public E minima() {
+        if (inferieureTaille == 0) {
+            return null;
+        }
         Maillon<E> tmp = inferieure;
-        while (tmp.suivant != null)
-            tmp=  tmp.suivant;
-E
+        while (tmp.suivant != null) {
+            tmp = tmp.suivant;
+        }
+
         return tmp.elem;
     }
 
     public E maxima() {
+        if (superieureTaille == 0) {
+            return inferieure.elem;
+        }
         Maillon<E> tmp = superieure;
-        while (tmp.suivant != null)
-            tmp=  tmp.suivant;
+        while (tmp.suivant != null) {
+            tmp = tmp.suivant;
+        }
 
         return tmp.elem;
     }
@@ -140,22 +151,34 @@ E
      */
     public void supprimer( E valeur ) {
         Maillon<E> tmp ;
+        boolean dans_inf = false;
         if (valeur.compareTo(milieu()) > 0){
             tmp = superieure;
             superieureTaille--;
         } else {
             tmp  = inferieure;
             inferieureTaille--;
+            dans_inf = true;
         }
-
-        while (tmp.suivant.elem.compareTo(valeur) != 0){
+        // 6 -> 7 ->8
+        Maillon <E> prec = null;
+        while (tmp.elem.compareTo(valeur) != 0){
+            prec = tmp;
             tmp = tmp.suivant;
         }
-        tmp.suivant  = tmp.suivant.suivant;
-        int diff_taille = inferieureTaille - superieureTaille;
-        if(diff_taille != 0 && diff_taille != 1){
-            equilibrer();
+
+        // si au début de la liste
+        if (prec == null) {
+            if (dans_inf) {
+                inferieure = inferieure.suivant;
+            } else {
+                superieure = superieure.suivant;
+            }
+        } else {
+            prec.suivant = tmp.suivant;
         }
+
+        equilibrer();
     }
 
     /*
@@ -173,8 +196,8 @@ E
         // return -> 1: 4 10 12
         //              2 1 0
 
-        2 :  18 19
-            15 17
+        // 2 :  18 19
+        //      15 17
 
         int diff_taille = inferieureTaille - superieureTaille;
         while(diff_taille != 0 && diff_taille != 1) {
@@ -182,32 +205,35 @@ E
                 // transfert superieur vers inferieur
                 // le premier de supérieur devient le premier de inférieur
 
-                inferieure = new Maillon<>(superieure.elem, superieure);
+                inferieure = new Maillon<>(superieure.elem, inferieure);
                 superieure = superieure.suivant;
-            } else if (diff_taille > 1) {
+                inferieureTaille++;
+                superieureTaille--;
+            } else {
                 //transfert inferieur -> superieur
-                superieure = new Maillon<>(inferieure.elem, inferieure);
+                superieure = new Maillon<>(inferieure.elem, superieure);
                 inferieure = inferieure.suivant;
+                inferieureTaille--;
+                superieureTaille++;
             }
 
-            diff_taille -= 2;
+            diff_taille = inferieureTaille - superieureTaille;
         }
     }
 
     @Override
     public String toString() {
-        System.out.println("yo");
         String sup = "";
         Maillon<E> tmp = superieure;
         for(int i = 0; i < superieureTaille; i++) {
-            sup = sup + tmp.elem.toString();
+            sup = sup + tmp.elem.toString() + " ";
             tmp = tmp.suivant;
         }
 
         String inf = "";
         tmp = inferieure;
         for(int i = 0; i < inferieureTaille; i++) {
-            inf = inf + tmp.elem.toString() + ", ";
+            inf = inf + tmp.elem.toString() + " ";
             tmp = tmp.suivant;
         }
 
