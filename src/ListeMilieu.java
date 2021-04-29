@@ -34,24 +34,31 @@ public class ListeMilieu< E extends Comparable< E > > {
         ListeMilieu<E> nouv = new ListeMilieu<>();
 
         Maillon<E> tmp = superieure;
-        for (int i=0; i < superieureTaille; i++){
+
+        for (int i=1; i <= superieureTaille; i++){
             nouv.inserer(tmp.elem);
             this.supprimer(tmp.elem);
             tmp = tmp.suivant;
 
         }
-        superieureTaille =0;
+        if (tmp != null){
+            nouv.inserer(tmp.elem);
+            this.supprimer(tmp.elem);
+        }
+
+       /* superieureTaille =0;
         Maillon<E> pmt = inferieure;
         superieure = pmt;
         //tmp = superieure;
         pmt  = pmt.suivant;
 
         int i;
-        for( i=1; i < inferieureTaille /2; i++){
+        for( i=1; i < inferieureTaille; i++){
             superieure = new Maillon<>(pmt.elem, superieure);
             pmt  = pmt.suivant;
         }
-
+        */
+        equilibrer();
 
 
         return nouv;
@@ -134,14 +141,17 @@ public class ListeMilieu< E extends Comparable< E > > {
     }
 
     public E maxima() {
+        if (taille() < 0) return null;
+
         if (superieureTaille == 0) {
             return inferieure.elem;
         }
         Maillon<E> tmp = superieure;
-        while (tmp.suivant != null) {
+        while (tmp != null && tmp.suivant != null) {
             tmp = tmp.suivant;
         }
-
+        if (tmp == null) return null;
+        else
         return tmp.elem;
     }
 
@@ -162,16 +172,16 @@ public class ListeMilieu< E extends Comparable< E > > {
         }
         // 6 -> 7 ->8
         Maillon <E> prec = null;
-        while (tmp.elem.compareTo(valeur) != 0){
+        while (tmp != null && tmp.elem.compareTo(valeur) != 0){
             prec = tmp;
             tmp = tmp.suivant;
         }
 
         // si au début de la liste
-        if (prec == null) {
-            if (dans_inf) {
+        if (prec == null ) {
+            if (dans_inf && inferieureTaille >= 1) {
                 inferieure = inferieure.suivant;
-            } else {
+            } else if (!dans_inf && superieureTaille >= 1){
                 superieure = superieure.suivant;
             }
         } else {
@@ -188,7 +198,9 @@ public class ListeMilieu< E extends Comparable< E > > {
         return superieureTaille + inferieureTaille;
     }
 
-    //*
+    /*
+        Cette methode sert aequilibrer les elements inférieur et supperieur
+     */
 
     public void equilibrer() {
         // le nb elem de superieur = nb elem de inferieur ou nb elem inferieur - 1
@@ -225,14 +237,14 @@ public class ListeMilieu< E extends Comparable< E > > {
     public String toString() {
         String sup = "";
         Maillon<E> tmp = superieure;
-        for(int i = 0; i < superieureTaille; i++) {
+        for(int i = 0; i < superieureTaille && tmp != null; i++) {
             sup = sup + tmp.elem.toString() + " ";
             tmp = tmp.suivant;
         }
 
         String inf = "";
         tmp = inferieure;
-        for(int i = 0; i < inferieureTaille; i++) {
+        for(int i = 0; i < inferieureTaille && tmp != null; i++) {
             inf = inf + tmp.elem.toString() + " ";
             tmp = tmp.suivant;
         }
