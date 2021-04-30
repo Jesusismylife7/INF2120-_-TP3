@@ -17,6 +17,17 @@ public class ListeMilieu< E extends Comparable< E > > {
         superieure = null;
     }
 
+    public boolean contient( E valeur ) {
+
+        Maillon< E > tmp = valeur.compareTo(milieu()) > 0 ? superieure : inferieure;
+
+        while (tmp != null && tmp.elem.compareTo(valeur) != 0) {
+            tmp = tmp.suivant;
+        }
+
+        return tmp != null;
+    }
+
     /*
     10 12 15
     8 5 3
@@ -89,7 +100,7 @@ public class ListeMilieu< E extends Comparable< E > > {
             // 2-> 3-> 6-> 9x
             // 3x
             if (prec == null) {
-                superieure = new Maillon<E>(valeur);
+                superieure = new Maillon<E>(valeur, suiv);
             } else {
                 prec.suivant = new Maillon<E>(valeur, suiv);
             }
@@ -107,7 +118,7 @@ public class ListeMilieu< E extends Comparable< E > > {
 
             // ajouter au début de la liste
             if (prec == null) {
-                inferieure = new Maillon<E>(valeur);
+                inferieure = new Maillon<E>(valeur, suiv);
             } else {
                 prec.suivant = new Maillon<E>(valeur, suiv);
             }
@@ -160,35 +171,61 @@ public class ListeMilieu< E extends Comparable< E > > {
      * @param valeur la veuleur a supprimer.
      */
     public void supprimer( E valeur ) {
-        Maillon<E> tmp ;
-        boolean dans_inf = false;
-        if (valeur.compareTo(milieu()) > 0){
+
+        Maillon < E > prec = null;
+        Maillon< E > tmp;
+
+        if (valeur.compareTo(milieu()) > 0 && superieure != null) {
             tmp = superieure;
-            superieureTaille--;
-        } else {
-            tmp  = inferieure;
-            inferieureTaille--;
-            dans_inf = true;
+            while (tmp != null && tmp.elem.compareTo(valeur) != 0){
+                prec = tmp;
+                tmp = tmp.suivant;
+            }
+
+            if (prec == null) {
+                superieure = tmp.suivant;
+                superieureTaille--;
+            } else if (tmp != null) {
+                prec.suivant = tmp.suivant;
+                superieureTaille--;
+            }
+        } else if (inferieure != null) {
+            tmp = inferieure;
+            while (tmp != null && tmp.elem.compareTo(valeur) != 0){
+                prec = tmp;
+                tmp = tmp.suivant;
+            }
+
+            if (prec == null) {
+                inferieure = tmp.suivant;
+                inferieureTaille--;
+            } else if (tmp != null) {
+                prec.suivant = tmp.suivant;
+                inferieureTaille--;
+            }
         }
-        // 6 -> 7 ->8
-        Maillon <E> prec = null;
+
+        equilibrer();
+    }
+
+
+    private void supprimerValeur(Maillon<E> liste, E valeur) {
+
+        if (liste == null) return;
+
+        Maillon < E > prec = null;
+        Maillon< E > tmp = liste;
         while (tmp != null && tmp.elem.compareTo(valeur) != 0){
             prec = tmp;
             tmp = tmp.suivant;
         }
 
-        // si au début de la liste
-        if (prec == null ) {
-            if (dans_inf && inferieureTaille >= 1) {
-                inferieure = inferieure.suivant;
-            } else if (!dans_inf && superieureTaille >= 1){
-                superieure = superieure.suivant;
-            }
-        } else {
+
+        if (prec == null) {
+           liste = tmp.suivant;
+        } else if (tmp != null) {
             prec.suivant = tmp.suivant;
         }
-
-        equilibrer();
     }
 
     /*

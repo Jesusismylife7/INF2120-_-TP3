@@ -126,7 +126,7 @@ class ListeMilieuTest {
     void inserer_deuxValeurs_double_taille() {
         ListeMilieu<Integer> a = construire(4, 4);
 
-        assertEquals(1, a.taille());
+        assertEquals(2, a.taille());
     }
 
     @Test
@@ -470,6 +470,23 @@ class ListeMilieuTest {
         a.supprimer(12);
 
         assertEquals(8, a.maxima());
+    }
+
+    @Test
+    void contient_true() {
+        ListeMilieu<Integer> a = construire(12, -1, 8);
+
+        assertTrue(a.contient(12));
+        assertTrue(a.contient(-1));
+        assertTrue(a.contient(8));
+    }
+
+    @Test
+    void contient_false() {
+        ListeMilieu<Integer> a = construire(12, -1, 8);
+
+        assertFalse(a.contient(-80));
+        assertFalse(a.contient(70));
     }
 
     @Test
