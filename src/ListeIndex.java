@@ -4,11 +4,9 @@ import java.util.List;
 public class ListeIndex<E extends Comparable< E > > {
 
     private List<ListeMilieu<E>> milieux ;
-    private int nbrListe;
 
     public ListeIndex() {
         milieux = new ArrayList<>(10);
-        nbrListe = 0;
     }
 
     /**
@@ -38,38 +36,35 @@ public class ListeIndex<E extends Comparable< E > > {
     /**
      * Insère la valeur dans la bonne ListeMilieu (selon le minima et maxima de chaque
      * liste).
-     * @param valeur
+     * @param valeur La valeur a insérer
      */
     public void inserer( E valeur ) {
         boolean estInseree = false;
-        int i;
-        if (nbrListe == 0){
-            ListeMilieu<E> ajou = new ListeMilieu<>();
-            ajou.inserer(valeur);
-            milieux.add(ajou);
-        } else {
-            for (i = 0; i < milieux.size() && milieux.get(i) != null
-                    && milieux.get(i+1) != null
-                    && !estInseree; i++) {
-                if (i != milieux.size() - 1
-                        && milieux.get(i).minima().compareTo(valeur) <= 0
-                        && milieux.get(i+1).minima().compareTo(valeur) > 0) {
-                    milieux.get(i).inserer(valeur);
 
-
-                    estInseree = true;
-                } else if (!estInseree && i == milieux.size() - 1
-                        && milieux.get(i).minima().compareTo(valeur) <= 0) {
-                    milieux.get(i).inserer(valeur);
-
-                }
-            }
-
-            if (estInseree && !(milieux.get(i).taille() <= 2 * nbrListe)) {
-                milieux.add(milieux.get(i).diviser());
-            }
+        if (nbrListe() == 0) {
+            milieux.add(new ListeMilieu<E>());
         }
 
+        for (int i = 0; i < nbrListe() && !estInseree; i++) {
+
+            ListeMilieu<E> mil = milieux.get(i);
+
+            boolean is_last_list = i == nbrListe() - 1;
+            boolean smaller_than_first = !is_last_list && i == 0 && valeur.compareTo(mil.minima()) < 0;
+
+            if (is_last_list || smaller_than_first || (valeur.compareTo(mil.minima()) >= 0
+                && valeur.compareTo(milieux.get(i+1).minima()) < 0)) {
+
+                mil.inserer(valeur);
+                estInseree = true;
+
+            }
+
+            if (estInseree && mil.taille() > 2 * nbrListe()) {
+                milieux.add(i+1, mil.diviser());
+                return;
+            }
+        }
 
         //valeur ---E; creer --listMilieu; ajoute lui. si il existe deja, il faut verifier.
     }
@@ -79,7 +74,7 @@ public class ListeIndex<E extends Comparable< E > > {
      * @return
      */
     public int nbrListe() {
-        return nbrListe;
+        return milieux.size();
     }
 
     /**
@@ -90,7 +85,7 @@ public class ListeIndex<E extends Comparable< E > > {
 //valeur (E); milieux (ListMilieux), arraylist; E --- ListMilieux
 
 
-       if(nbrListe > 0) {
+       if(nbrListe() > 0) {
             for (ListeMilieu<E> mil : milieux) {
                 if (mil.contient(valeur)) {
                     mil.supprimer(valeur);
@@ -111,5 +106,15 @@ public class ListeIndex<E extends Comparable< E > > {
             taille_totale += mil.taille();
         }
         return taille_totale;
+    }
+
+    @Override
+    public String toString() {
+        String ret = "";
+        for (int i = 0; i < nbrListe(); i++) {
+            ret += milieux.get(i).toString() + "\n";
+        }
+
+        return ret;
     }
 }

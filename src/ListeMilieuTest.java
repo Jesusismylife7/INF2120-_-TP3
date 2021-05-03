@@ -850,7 +850,7 @@ class ListeMilieuTest {
     //------------------------------------------------
     // Test charge
     // 12.510 secondes chez moi.
-/*
+
     @Test
     void charge() {
         final int NOMBRE_CHOIX = 100_000;
@@ -867,7 +867,6 @@ class ListeMilieuTest {
 
         assertTrue( a.taille() <= NOMBRE_CHOIX );
     }
-}
 
- */
+
 }

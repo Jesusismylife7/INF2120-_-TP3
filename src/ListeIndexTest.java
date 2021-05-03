@@ -2,7 +2,6 @@
 import org.junit.jupiter.api.Test;
 
 import java.util.Random;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -18,6 +17,8 @@ class ListeIndexTest {
         for( E v : valeurs ) {
             resultat.inserer( v );
         }
+
+        System.out.println(resultat.toString());
 
         return resultat;
     }

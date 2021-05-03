@@ -19,6 +19,10 @@ public class ListeMilieu< E extends Comparable< E > > {
 
     public boolean contient( E valeur ) {
 
+        if (taille() == 0) {
+            return false;
+        }
+
         Maillon< E > tmp = valeur.compareTo(milieu()) > 0 ? superieure : inferieure;
 
         while (tmp != null && tmp.elem.compareTo(valeur) != 0) {
@@ -28,19 +32,10 @@ public class ListeMilieu< E extends Comparable< E > > {
         return tmp != null;
     }
 
-    /*
-    10 12 15
-    8 5 3
-
-    return -> 1: 15
-                 12 10
-
-
-
-    this -> 2: 8
-               5 3
+    /**
+     * Divise la ListeMilieu en deux. Retourne la liste supérieure et conserve l'inférieure.
+     * @return La nouvelle ListeMilieu contenant les valeurs supérieures.
      */
-
     public ListeMilieu<E> diviser() {
         ListeMilieu<E> nouv = new ListeMilieu<>();
 
@@ -57,20 +52,7 @@ public class ListeMilieu< E extends Comparable< E > > {
             this.supprimer(tmp.elem);
         }
 
-       /* superieureTaille =0;
-        Maillon<E> pmt = inferieure;
-        superieure = pmt;
-        //tmp = superieure;
-        pmt  = pmt.suivant;
-
-        int i;
-        for( i=1; i < inferieureTaille; i++){
-            superieure = new Maillon<>(pmt.elem, superieure);
-            pmt  = pmt.suivant;
-        }
-        */
         equilibrer();
-
 
         return nouv;
     }
@@ -208,26 +190,6 @@ public class ListeMilieu< E extends Comparable< E > > {
         equilibrer();
     }
 
-
-    private void supprimerValeur(Maillon<E> liste, E valeur) {
-
-        if (liste == null) return;
-
-        Maillon < E > prec = null;
-        Maillon< E > tmp = liste;
-        while (tmp != null && tmp.elem.compareTo(valeur) != 0){
-            prec = tmp;
-            tmp = tmp.suivant;
-        }
-
-
-        if (prec == null) {
-           liste = tmp.suivant;
-        } else if (tmp != null) {
-            prec.suivant = tmp.suivant;
-        }
-    }
-
     /*
 
      */
@@ -286,6 +248,6 @@ public class ListeMilieu< E extends Comparable< E > > {
             tmp = tmp.suivant;
         }
 
-        return "sup : "+sup+"\ninf : "+inf;
+        return "inf : "+inf+"\nsup : "+sup;
     }
 }
